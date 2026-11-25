@@ -91,6 +91,14 @@ def bang_theo_loai(runs, reqs):
     return pd.DataFrame(dong)
 
 
+def ti_le_ok_theo_lan_chay(runs, reqs):
+    """A3: tỉ lệ lần chạy status == 'ok' theo từng loại yêu cầu và từng lần thử (attempt)."""
+    merged = runs.merge(reqs[['request_id', 'loai']], on='request_id')
+    merged['is_ok'] = (merged['status'] == 'ok').astype(int)
+    bang = merged.pivot_table(index='loai', columns='attempt', values='is_ok', aggfunc='mean')
+    return bang.reindex(['noi_dia', 'hang_nang', 'quoc_te', 'doi_tac'])
+
+
 def chi_phi_co_dinh_pilot(runs, reqs):
     """A4: cộng chi phí cố định 40 triệu/tháng vào phạm vi noi_dia + hang_nang."""
     sub = reqs[reqs['loai'].isin(PHAM_VI)]
@@ -149,11 +157,14 @@ def gioi_han_chay(runs, reqs):
     return pd.DataFrame(dong)
 
 
-def xem_lai_tat_ca(runs, reqs):
-    """B4: xem lại 100% ca noi_dia + hang_nang (5 phút mỗi yêu cầu có ít nhất một lần chạy ok)."""
+def xem_lai_tat_ca(runs, reqs, phut_lam_lai=None):
+    """B4: xem lại 100% ca noi_dia + hang_nang (5 phút mỗi yêu cầu có ít nhất một lần chạy ok).
+    Nếu truyền phut_lam_lai, thay phút làm lại mỗi ca ket_qua == 'lam_lai' bằng giá trị đó."""
     sub = reqs[reqs['loai'].isin(PHAM_VI)].copy()
     co_ok = runs[runs['status'] == 'ok']['request_id'].unique()
     sub['phut_xem_lai_simulated'] = sub['request_id'].isin(co_ok) * 5
+    if phut_lam_lai is not None:
+        sub['phut_lam_lai_simulated'] = (sub['ket_qua'] == 'lam_lai') * phut_lam_lai
     kq = mo_hinh(runs, sub)
     return kq['cps'], kq['cps'] / BASELINE
 
@@ -228,6 +239,8 @@ if __name__ == '__main__':
     # CP1 · Nhiệm vụ A3: tính lại theo từng giá trị của cột loai.
     print('\nA3 · theo loại')
     print(bang_theo_loai(runs, reqs).to_string(index=False, float_format=lambda x: f'{x:,.3f}'))
+    print('\nA3 · tỉ lệ ok theo từng lần chạy (attempt)')
+    print(ti_le_ok_theo_lan_chay(runs, reqs).to_string(float_format=lambda x: f'{x * 100:.1f}%'))
 
     # CP1 · Nhiệm vụ A4: chi phí cố định cho phạm vi noi_dia + hang_nang.
     print('\nA4 · chi phí cố định (phạm vi noi_dia + hang_nang)')
@@ -241,8 +254,13 @@ if __name__ == '__main__':
     print('\nB3 · giới hạn số lần chạy')
     print(gioi_han_chay(runs, reqs).to_string(index=False, float_format=lambda x: f'{x:,.0f}'))
 
+    cps_b4_9, ti_so_b4_9 = xem_lai_tat_ca(runs, reqs, phut_lam_lai=9)
+    tb_lam_lai = reqs.loc[reqs['ket_qua'] == 'lam_lai', 'phut_lam_lai_simulated'].mean()
+    cps_b4_tb, ti_so_b4_tb = xem_lai_tat_ca(runs, reqs, phut_lam_lai=tb_lam_lai)
     cps_b4, ti_so_b4 = xem_lai_tat_ca(runs, reqs)
-    print(f'\nB4 · xem lại 100% (noi_dia + hang_nang): {cps_b4:,.0f} đ = {ti_so_b4:.2f}× [simulated]')
+    print(f'\nB4 · xem lại 100% (noi_dia + hang_nang, giả định 9 phút làm lại):        {cps_b4_9:,.0f} đ = {ti_so_b4_9:.2f}× [simulated]')
+    print(f'B4 · xem lại 100% (noi_dia + hang_nang, TB toàn mẫu {tb_lam_lai:.1f} phút làm lại): {cps_b4_tb:,.0f} đ = {ti_so_b4_tb:.2f}× [simulated]')
+    print(f'B4 · xem lại 100% (noi_dia + hang_nang, dữ liệu simulated trực tiếp):   {cps_b4:,.0f} đ = {ti_so_b4:.2f}× [simulated]')
 
     # CP4 · Nhiệm vụ D: cỡ mẫu và tỉ lệ mở lại 7 ngày.
     tinh_d1(reqs)
