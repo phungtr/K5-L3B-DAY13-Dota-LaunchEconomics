@@ -26,6 +26,7 @@
 
 - Commit `7ac1a45` (`chi_so: event list, 2 proposed metrics, cross-check (Trung)`): `report/team/chi_so.md` (2 chỉ số tự đề xuất, 9 event có `trace_id`, mục kiểm tra chéo) và khởi tạo `report/team/2A202604013_NguyenBaoTrung.md`.
 - Commit `7116fae` (`docs(cp3): complete bang_loi.md with 16/20 agreement and 5-case remediation (Trung)`): `report/team/bang_loi.md` (hai bộ nhãn độc lập giữ nguyên gốc, đồng thuận `16/20 = 80%`, 4 quy tắc phân biệt Ca 1/3/8/13, bảng khắc phục 5 ca: 14, 7, 16, 4, 5).
+- Commit `c552549` (`docs(cp5): update Trung report, TEAM.md section, and simulated label in chi_so.md`): bổ sung nhãn `simulated` bảng E2 trong `report/team/chi_so.md`, điền phần đóng góp trong `TEAM.md` và cập nhật báo cáo cá nhân.
 - Kết quả chạy kiểm tra `src/lab13.py` trên máy cá nhân (từ commit `0bd3f2d`): ba phép thử A1 ĐẠT, `cps = 4.472 đ` (`simulated`), 978 việc thành công; đối chiếu độc lập 3 chỉ số E1 và toàn bộ bảng A1–E1 từ commit `a7f9391` trên `logix_runs.csv` và `logix_requests.csv`.
 - *(Sẽ bổ sung commit của `phieu_cham.md` và kết quả chạy cuối `src/lab13.py` bằng `.venv` sau 17:00.)*
 
@@ -43,4 +44,10 @@
 
 ## 6. Tự đánh giá
 
-*(Chưa chốt — sẽ điền sau khi hoàn thành soát CP4, duyệt chéo Gate 2a lúc 17:00 và chạy kiểm tra cuối `src/lab13.py`.)*
+- **Điểm làm tốt:**
+  - Giữ đúng tính độc lập khi gắn nhãn CP3 (tự gắn đủ 20 ca trước khi so với Trà, đạt đồng thuận `16/20 = 80%`), chốt 4 quy tắc phân biệt rõ cho 4 ca lệch và gắn bảng khắc phục 5 ca trực tiếp với event đo được cùng vai trò phụ trách cụ thể.
+  - Thiết kế hệ thống 9 event có `trace_id` (gồm cả event `kiem_tra_mau_hoan_tien` bắt lỗi ngầm) và lập kiểm tra chéo bao phủ toàn bộ chỉ số E1 lẫn chi phí đo thật trong pilot.
+  - Soát đều điều kiện "Xong khi" qua các CP1–CP5 (phát hiện và bổ sung nhãn `simulated` còn thiếu ở bảng E2 trong `chi_so.md`, đối chiếu độc lập các con số của `src/lab13.py`, đảm bảo `0` từ bị cấm và `0` dấu `?` trong `pilot_plan.yaml`).
+- **Điểm cần rút kinh nghiệm & việc còn lại:**
+  - Ở CP3 còn lệch 4 ca (`Ca 1, 3, 8, 13`) do lúc đầu nghiêng về "chỗ hệ thống cần sửa" thay vì nguyên nhân gốc; sau khi thảo luận đã nắm rõ hơn cách phân biệt giữa lỗi do người dùng, ngữ cảnh, giới hạn hệ thống và lỗi hệ thống.
+  - Còn 2 đầu việc cuối buổi theo phân công: viết `report/team/phieu_cham.md` khi duyệt chéo Gate 2a lúc 17:00 và chạy xác nhận cuối `src/lab13.py` bằng `.venv` trước khi nộp lúc 17:45.
