@@ -31,13 +31,15 @@ Cách làm: mọi con số do `src/lab13.py` tính từ hai file trace (1.200 y�
 - Chỉ số trong đợt chạy thử: chính 82,83%, bỏ qua gợi ý 27,12%, mở lại 7 ngày 4,25% (chưa có đối chứng nên chưa kết luận về tác động).
 - Pilot: chia theo nhân viên 20 + 20, mức chênh 6 điểm, n hiệu dụng 859 mỗi nhóm; con số bất lợi: power 0,64 nếu chênh thật chỉ 5 điểm.
 - Đề xuất cuối của `ho_so_launch_v0.md`: **Go có điều kiện** cho pilot `noi_dia` + `hang_nang`, cả 12 depot, bắt đầu 2026-12-07, quyết định 2027-01-08; 5 điều kiện có người phụ trách và ngày kiểm tra (sửa ca 7 và 20; loại `quoc_te`, `doi_tac`; ký chấp nhận mức chênh 6 điểm; đo phút thật; giảm xem lại theo bậc).
-- Kết quả duyệt chéo nhóm nhận được từ hội đồng: ...
+- Kết quả duyệt chéo nhóm nhận được từ hội đồng: hội đồng là nhóm Bá Khí, đặt 5 câu hỏi về (1) luật 8.000 đ khi cộng tiền thuê ở bước 4–10 người, (2) giới hạn 2 lần chạy và ngưỡng giảm xem lại, (3) thiếu event ghi sổ cái cho ca hoàn trùng, (4) học chéo và trường hợp không đủ 299 yêu cầu mỗi người, (5) baseline 0,70 so với 82,83%. Nhóm nhận ba thiếu sót (luật 8.000 đ cộng tiền thuê, thiếu event sổ cái, chưa có ngưỡng giảm xem lại) và đã sửa trong `pilot_plan.yaml`, `chi_so.md`, `ho_so_launch_v0.md`. Điểm và quyết định của hội đồng: (ghi theo phiếu của nhóm Bá Khí).
+- Nhóm Dota làm hội đồng chấm nhóm Bá Khí: 30/30, Go có điều kiện, kèm hai điều kiện sửa luật dừng theo slide chữa D3 và A4 ([phieu_cham.md](phieu_cham.md)).
 
 ## 5. Khó khăn và cách xử lý
 
 - **Cài môi trường trên Windows.** Chạy nguyên khối lệnh macOS/Linux trong `src/README.md` bằng Windows PowerShell báo lỗi `python3 : The term 'python3' is not recognized...` và `source : The term 'source' is not recognized...`. Xử lý: dùng lệnh Windows `python -m venv .venv` rồi `.\.venv\Scripts\Activate.ps1`; sau đó `python -m pip install -r requirements.txt` cài xong (pandas 3.1.1, statsmodels 0.15.0, Python 3.12.10) và `python -c "import pandas, numpy, scipy, statsmodels; print('san sang')"` in `san sang`.
 - **B4 lệch giữa giả định đề và dữ liệu.** Đề cho 9 phút mỗi ca làm lại, nhưng cột `phut_lam_lai_simulated` trung bình 15,3 phút/ca trên toàn mẫu và 16,25 phút/ca trong phạm vi. Nhóm báo cáo cả ba con số (11.743 đ, 12.414 đ, 12.516 đ, đều `simulated`) thay vì chọn một.
 - **Phạm vi pilot mâu thuẫn với cách chia.** Bản đầu của `pilot_plan.yaml` ghi phạm vi "6 depot chạy thử", nhưng đợt chạy thử chỉ có 6 depot và 20 nhân viên, nên chia 20 + 20 là không thể (chỉ được 10 + 10, dưới 20 cụm). Sửa phạm vi thành cả 12 depot và tính lại ngày quyết định từ 30,7 yêu cầu/người/ngày cộng 7 ngày theo dõi mở lại.
+- **Luật dừng bị slide chữa D3/A4 và hội đồng chỉ ra.** Luật an toàn dùng mức lệch 2 điểm ngay từ bước 4 người (56/1.000 lần lệch chỉ do ngẫu nhiên), và luật chi phí 8.000 đ cộng cả tiền thuê nên tự kích hoạt ở tuần 1–2 (15.266 đ ở 4 người, 8.155 đ ở 10 người, simulated). Sửa sau duyệt chéo: tách luật an toàn (tắt ngay khi hoàn trùng, báo hoàn sai hoặc mở lại > 6%; lệch 2 điểm chỉ từ bước 10 người), ngưỡng 8.000 đ không cộng tiền thuê, thêm event `so_cai_ghi_hoan` và dòng rủi ro tiền thuê.
 
 ## 6. Tổng hợp đóng góp
 

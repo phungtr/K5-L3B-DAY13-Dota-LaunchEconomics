@@ -21,7 +21,9 @@
 - **CP3 · gắn nhãn 2:** tự gắn nhãn độc lập 20 ca trong 8 phút, không trao đổi, không xem nhãn tham khảo; đưa bộ nhãn gốc lên `report/team/cp3_nhan_doc_lap_nguoi_2.md` để so với người gắn nhãn 1. Đồng thuận 16/20 = 80%.
 - **Giữ hồ sơ:** điền `ho_so_launch_v0.md` dần theo từng CP: mục 1–3 sau CP1–CP2 (4.472 đ/việc thành công, 5.865 đ/yêu cầu = 0,49×, đều `simulated`), mục 5 sau CP3, mục 6 sau CP4; viết bản nháp đề xuất Go có điều kiện với 5 điều kiện, mỗi điều kiện có người phụ trách và ngày kiểm tra.
 - **CP4 · rà soát pilot:** phát hiện phạm vi "6 depot chạy thử" mâu thuẫn với cách chia 20 + 20 nhân viên (đợt chạy thử chỉ có 6 depot, 20 nhân viên, nên chỉ chia được 10 + 10, dưới 20 cụm); sửa thành cả 12 depot. Tính lại ngày quyết định: 30,7 yêu cầu/người/ngày → khoảng 10 ngày để đủ 299 yêu cầu mỗi người, cộng 7 ngày theo dõi mở lại → 2027-01-08.
-- **Quản lý repo:** review và merge PR #3, #4, #7; dựng `group_report.md`.
+- **Quản lý repo:** review và merge PR #3, #4, #7, #10; dựng `group_report.md`.
+- **Duyệt chéo:** chuẩn bị bài trình 1 phút và câu trả lời cho 5 câu hỏi của hội đồng Bá Khí; viết nhận xét đối chiếu slide chữa D1/D3/A4 và điền `phieu_cham.md` chấm nhóm Bá Khí (30/30, Go có điều kiện).
+- **Sau duyệt chéo:** sửa luật dừng trong `pilot_plan.yaml` theo những thiếu sót đã nhận (tách luật an toàn theo bước rollout, ngưỡng 8.000 đ không cộng tiền thuê, bật tối đa 2 lần chạy, ngưỡng giảm xem lại, quy tắc dời ngày quyết định); thêm event `so_cai_ghi_hoan` và dòng rủi ro tiền thuê trong `chi_so.md`; cập nhật hồ sơ mục 4, 6, 7.
 
 ## 4. Bằng chứng
 

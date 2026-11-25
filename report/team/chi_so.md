@@ -27,6 +27,8 @@ Viết "chỉ số trong đợt chạy thử là …", không viết "trợ lý 
 | `ticket_dong` | Hệ thống ticket | request_id, closed_at, ket_qua, trace_id | Khi yêu cầu được đóng |
 | `ticket_mo_lai` | Khách / hệ thống ticket | request_id, reopened_at, ly_do, trace_id | Khi khách mở lại yêu cầu |
 | `kiem_tra_mau_hoan_tien` | Kế toán | request_id, so_tien_da_hoan, so_tien_dung, trace_id | Hằng tuần, trên mẫu ngẫu nhiên các yêu cầu đã đóng |
+| `so_cai_ghi_hoan` | Dịch vụ sổ cái | request_id, idempotency_key, so_tien, ket_qua (`ok`/`loi`), trace_id | Mỗi lần ghi lệnh hoàn tiền vào sổ cái |
+| `thong_bao_hoan_gui` | Agent | request_id, noi_dung (`da_hoan`/`dang_xu_ly`), kenh, sent_at, trace_id | Khi gửi thông báo hoàn tiền cho khách |
 
 **Kiểm tra chéo:** với mỗi chỉ số ở bảng E1, ghi event dùng để tính. Chỉ số nào không tính được từ danh sách event thì chưa đo được.
 
@@ -36,6 +38,7 @@ Viết "chỉ số trong đợt chạy thử là …", không viết "trợ lý 
 - Dùng (tự đề xuất): `goi_y_hien_thi` (mẫu số) và `nhan_vien_xem_lai` với `giu` (tử số), gom theo `staff_id` và tuần.
 - An toàn (tự đề xuất): `nhan_vien_xem_lai` với `giu` (mẫu số) nối với `ticket_mo_lai` qua `trace_id` (tử số).
 - Lỗi ngầm (hoàn sai tiền mà khách không mở lại): `kiem_tra_mau_hoan_tien` có `so_tien_da_hoan` khác `so_tien_dung`, chia số yêu cầu được kiểm trong tuần.
+- Lỗi hệ thống làm sai tiền (ca 7, 20; luật dừng 1 trong `pilot_plan.yaml`): cảnh báo tức thời, ngưỡng 0 ca, khi có ≥ 2 bản ghi `so_cai_ghi_hoan` với `ket_qua = ok` cho cùng `request_id` (hoàn trùng), hoặc `thong_bao_hoan_gui` có `noi_dung = da_hoan` mà không có `so_cai_ghi_hoan` `ok` cùng `trace_id` (báo hoàn sai).
 - Chi phí mỗi việc thành công (nhiệm vụ A) đo thật trong pilot: token, tool từ `agent_lan_chay_xong`; phút xem lại, phút làm lại từ `nhan_vien_xem_lai`, `nhan_vien_lam_lai_xong` (thay hai cột simulated); mẫu số là `ticket_dong` có `ket_qua = thanh_cong`.
 
 ## E2 · Rủi ro kinh tế
@@ -47,3 +50,4 @@ Viết "chỉ số trong đợt chạy thử là …", không viết "trợ lý 
 | Ca làm lại tăng gấp đôi | Chi phí mỗi việc thành công `4.472 → 6.787 đ` (`+51,8%`, simulated) | Số `nhan_vien_lam_lai_xong` chia số `ticket_dong` có `thanh_cong`, theo tuần; `phut_lam_lai` đo thật | Nếu tỉ lệ làm lại tuần tăng so với tuần đầu pilot, rà 10 ca lỗi gần nhất tìm nguyên nhân gốc trước khi mở rộng | Trưởng nhóm CSKH |
 | Tỉ lệ xem lại tăng gấp đôi | `4.472 → 6.292 đ` (`+40,7%`, simulated); giảm một nửa còn `3.562 đ` (`−20,3%`, simulated) | Số `nhan_vien_xem_lai` chia số `goi_y_hien_thi` theo tuần; `phut_xem_lai` đo từ `shown_at` | Giảm xem lại theo bậc khi chỉ số an toàn vẫn đạt; không xem 100% vì khi đó chi phí `1,04×` so với nhân viên tự làm (B4, simulated) | Giám đốc vận hành |
 | Lương nhân viên tăng 25% | `4.472 → 5.506 đ` (`+23,1%`, simulated) | Đơn giá lương `2.500 đ` mỗi phút trong bảng chi phí hằng tháng | Cập nhật bảng chi phí khi có lương mới; so lại với ngưỡng `8.000 đ` trong luật dừng chi phí | Kế toán |
+| Tiền thuê 40 triệu/tháng khi còn ít đơn (bước 4 và 10 người) | Phạm vi `noi_dia + hang_nang`: `3.414 đ` chưa gồm tiền thuê; cộng tiền thuê thành `15.266 đ` ở 4 người, `8.155 đ` ở 10 người, `5.784 đ` ở 20 người, `4.599 đ` ở cả công ty (simulated). Tính tay: 40.000.000 ÷ (45.000 × tỉ lệ người dùng × 900 / 1.200) + 3.414 | Số `ticket_dong` có `thanh_cong` trong phạm vi theo tháng so với 33.750 việc/tháng ở quy mô đầy đủ | Không đưa tiền thuê vào ngưỡng `8.000 đ` của luật dừng; nếu số việc thành công dưới 50% kế hoạch thì xem lại hợp đồng chi phí cố định, không kết luận trợ lý đắt | PM trợ lý hoàn phí |

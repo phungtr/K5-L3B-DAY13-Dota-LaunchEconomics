@@ -21,7 +21,9 @@
 #   Nếu tác động thật chỉ 5 điểm, power còn khoảng 0,64 với n = 859 (NormalIndPower, đã kiểm lại bằng tay).
 #
 # Tỉ lệ mo_lai_trong_7_ngay hiện tại và ngưỡng an toàn đã chọn:
-#   Toàn bộ 4,25% (51/1.200); phạm vi noi_dia + hang_nang 3,97% (39/982). Ngưỡng: vượt đối chứng ≥ 2 điểm hoặc vượt 6% tuyệt đối.
+#   Toàn bộ 4,25% (51/1.200); phạm vi noi_dia + hang_nang 3,97% (39/982).
+#   Ngưỡng: từ bước 4 người tắt ngay khi mở lại > 6%, có ca hoàn trùng, hoặc báo "đã hoàn" mà sổ cái không ghi.
+#   Mức lệch ≥ 2 điểm so với đối chứng chỉ áp dụng từ bước 10 người: với 4 người, 56/1.000 lần lệch ≥ 2 điểm chỉ do ngẫu nhiên; với 10 người còn 8/1.000 (slide chữa D3).
 #
 # Lưu ý dữ liệu: chỉ số chính đo được trên 1.200 yêu cầu là 82,83% (994/1.200), không phải 0,70. Baseline 0,70 là số cho sẵn của lab để tính cỡ mẫu; xem simulated_inputs.
 #
@@ -38,7 +40,9 @@ pilot:
     unit: "staff"
     control_share: 0.5
     randomized: true
-  rollout: [0.10, 0.25, 0.50]     # mỗi bước một tuần; 4 → 10 → 20 nhân viên; chỉ đo chỉ số chính từ bước 0.50
+  rollout: [0.10, 0.25, 0.50]     # 4 → 10 → 20 nhân viên; bước 0.10 và 0.25 mỗi bước một tuần; bước 0.50 kéo dài ≥ 10 ngày (30,7 yêu cầu/người/ngày trong phạm vi; nếu tính cả 1.500 đơn là 37,5 → 8 ngày); chỉ đo chỉ số chính từ bước 0.50
+  agent_max_runs: 2               # bật từ ngày đầu; B3 trong phạm vi: chi phí cả hệ thống 3.980.391 đ với 2 lần so với 4.056.513 đ với 3 lần (−1,9%, simulated), đổi lại thêm 8 ca chuyển nhân viên
+  review_plan: "Xem lại 100% ở bước 0.10 và 0.25. Ngày 2026-12-18 giảm xuống 50% (chọn ngẫu nhiên) nếu tuần bước 0.25 có tỉ lệ sửa + bỏ < 15% (đợt chạy thử trong phạm vi 21,09%, 27/128), 0 ca hoàn sai tiền qua kiểm tra mẫu và phút xem lại đo thật trung bình ≤ 5 phút (hoà vốn 5,1 phút); không đạt thì giữ 100% và chưa chuyển bước"
   primary_metric:
     name: dong_trong_24h_khong_mo_lai_7_ngay
     baseline: 0.70                # số cho sẵn để tính cỡ mẫu; đo được 0,8283
@@ -50,19 +54,23 @@ pilot:
     clusters_per_arm: 20
   identifiability:
     concurrent_control: "Có: 20 nhân viên đối chứng chạy cùng tuần, cùng depot, phân tầng theo depot"
-    spillover_risk: "Có: nhân viên cùng depot chia sẻ câu trả lời; giảm bằng quyền truy cập theo tài khoản và log lượt mở theo staff_id"
+    spillover_risk: "Có: nhân viên cùng depot chia sẻ câu trả lời; giảm bằng quyền truy cập theo tài khoản, log lượt mở theo staff_id, cấm chia sẻ câu trả lời của trợ lý trong nhóm chat depot, xếp chỗ hoặc ca tách hai nhóm. Đo học chéo bằng cách so chỉ số của nhóm đối chứng với chính họ 2 tuần trước pilot; học chéo chỉ làm ước lượng thấp tác động, không tạo dương tính giả"
     predeclared: "Có: chỉ số chính, ngưỡng, luật dừng và ngày quyết định ghi trong file này trước ngày bắt đầu; seed ghi trước"
   stop_rules:
-    - "NẾU tỉ lệ mở lại 7 ngày của nhóm trợ lý vượt nhóm đối chứng ≥ 2 điểm phần trăm hoặc vượt 6% tuyệt đối TRONG 3 ngày liên tiếp THÌ Giám đốc vận hành tắt trợ lý trong 30 phút và không chuyển bước rollout KHÔNG THÌ không được chuyển sang bước rollout tiếp theo"
-    - "NẾU chi phí mỗi việc thành công (có chi phí cố định) vượt 8.000 đ TRONG 2 tuần liên tiếp THÌ Quản lý sản phẩm thu hẹp pilot về noi_dia và giới hạn 2 lần chạy KHÔNG THÌ không được mở hang_nang"
+    - "NẾU có ≥ 1 ca hoàn tiền hai lần cho cùng một request_id (2 bản ghi so_cai_ghi_hoan thành công), hoặc ≥ 1 tin nhắn 'đã hoàn' không có bản ghi sổ cái cùng trace_id, hoặc tỉ lệ mở lại 7 ngày của nhóm trợ lý vượt 6%, áp dụng từ bước 4 người, TRONG 1 ngày bất kỳ THÌ Giám đốc vận hành tắt trợ lý trong 30 phút KHÔNG THÌ không được chạy tiếp hay chuyển bước rollout"
+    - "NẾU từ bước 10 người trở đi, tỉ lệ mở lại 7 ngày của nhóm trợ lý cao hơn nhóm đối chứng ≥ 2 điểm phần trăm, tính trên các yêu cầu đã đủ 7 ngày theo dõi, TRONG 3 ngày liên tiếp THÌ Giám đốc vận hành tắt trợ lý trong 30 phút KHÔNG THÌ không được chuyển sang bước rollout tiếp theo"
+    - "NẾU chi phí mỗi việc thành công chưa gồm 40 triệu tiền thuê (token, tool, phút xem lại và làm lại đo thật) vượt 8.000 đ, tính từ khi đã giảm xem lại dưới 100%, TRONG 7 ngày liên tiếp THÌ PM trợ lý hoàn phí thu hẹp pilot về noi_dia KHÔNG THÌ không được chuyển bước rollout; tiền thuê theo dõi riêng ở E2, ít đơn thì xem lại hợp đồng, không kết luận trợ lý đắt"
     - "NẾU tỉ lệ bỏ qua gợi ý vượt 40% (đo được 27,12% trong thử nghiệm) TRONG 1 tuần THÌ Trưởng nhóm CSKH phỏng vấn 5 nhân viên trong 3 ngày KHÔNG THÌ không được chuyển bước rollout"
   interim_looks: "chỉ kiểm tra chỉ số an toàn"
   rollback: "Giám đốc vận hành bấm cờ tắt trợ lý, hiệu lực trong 30 phút; khách được phục vụ bằng luồng nhân viên tự làm như trước pilot"
   decision_date: "2027-01-08"     # đủ 299 yêu cầu mỗi người ngày 2026-12-30, cộng 7 ngày theo dõi mở lại; xem lịch ở chú thích đầu file
+  decision_rule: "Chỉ chốt khi mọi nhân viên đủ ≥ 299 yêu cầu trong phạm vi, cộng 7 ngày theo dõi mở lại, cộng 2 ngày tổng hợp; thiếu thì kéo dài bước 0.50 và dời decision_date tương ứng, trong lúc chờ chỉ xem chỉ số an toàn"
+  baseline_recheck: "Nếu chỉ số chính của nhóm đối chứng ở bước 0.10 vượt 0,80, tính lại mde và cỡ mẫu (baseline 0,83 cần 524 mỗi nhóm, m ≥ 54) và trình Giám đốc vận hành trước bước 0.50; từ 0,83 tăng 6 điểm là giảm 35% số ca lỗi, khó đạt hơn từ 0,70 (giảm 20%)"
   simulated_inputs:
     - "Giá token 26 và 130 đ mỗi 1.000 token, giá tool 15 đ, lương 2.000 đ mỗi phút (đề bài, giả định)"
     - "Phút xem lại và làm lại (phut_xem_lai_simulated, phut_lam_lai_simulated), simulated"
     - "Chi phí mỗi việc thành công 4.472 đ và 4.599 đ với chi phí cố định; simulated"
     - "Chi phí cố định 40 triệu đ mỗi tháng và 45.000 yêu cầu mỗi tháng (đề bài, giả định)"
+    - "Ngưỡng 8.000 đ so với chi phí chưa gồm tiền thuê: 3.252 đ/việc trong phạm vi với tối đa 2 lần chạy; nếu cộng tiền thuê thì 15.266 đ ở bước 4 người, 8.155 đ ở bước 10 người, 5.784 đ ở bước 20 người; simulated"
     - "Baseline 0,70, ICC 0,02, mục tiêu +5 điểm (đề bài). Chỉ số chính đo được 0,8283; cỡ mẫu chưa tính lại với 0,83"
     - "Khối lượng 1.500 yêu cầu mỗi ngày, 40 nhân viên (đề bài, giả định) dùng để ước lịch đo và ngày quyết định 2027-01-08"
