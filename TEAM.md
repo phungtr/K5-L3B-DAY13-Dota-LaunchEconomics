@@ -116,8 +116,13 @@ Tên file của nhóm:
 
 ### Đóng góp cụ thể
 
-- (điền sau buổi lab)
+- Soát điều kiện "Xong khi", nhãn `simulated` và quy tắc bắt buộc qua các CP1–CP5 (`bang_chi_phi.md`, `pilot_plan.yaml`, `chi_so.md`); đối chiếu độc lập kết quả `src/lab13.py` (A1–E1).
+- Gắn nhãn độc lập 20 ca lỗi theo 5 loại Google PAIR, so nhãn với Trà đạt đồng thuận `16/20 = 80%`, viết 4 quy tắc phân biệt (Ca 1, 3, 8, 13) và bảng khắc phục 5 ca (Ca 14, 7, 16, 4, 5) trong `report/team/bang_loi.md`.
+- Thiết kế 2 chỉ số tự đề xuất, 9 event có `trace_id` (gồm event `kiem_tra_mau_hoan_tien` bắt lỗi ngầm) và phần kiểm tra chéo chỉ số → event trong `report/team/chi_so.md`.
+- *(Chờ bổ sung sau 17:00: viết `report/team/phieu_cham.md` khi duyệt chéo Gate 2a và chạy kiểm cuối `src/lab13.py`.)*
 
 ### Bằng chứng
 
-- (commit, file, con số)
+- Commit `7ac1a45` (`report/team/chi_so.md`, `report/team/2A202604013_NguyenBaoTrung.md`).
+- Commit `7116fae` (`report/team/bang_loi.md`: 16/20 đồng thuận, 4 quy tắc, 5 ca khắc phục).
+- `report/team/2A202604013_NguyenBaoTrung.md` (báo cáo cá nhân).
