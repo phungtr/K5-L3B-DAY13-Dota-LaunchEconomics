@@ -199,6 +199,24 @@ def tinh_d1(reqs, baseline=0.70, alpha=0.05, power=0.80, icc=0.02):
                 reopen_all=reopen_all, reopen_sub=reopen_sub)
 
 
+def tinh_e1(reqs):
+    """CP5 · Nhiệm vụ E1: tính thử ba chỉ số trên 1.200 yêu cầu."""
+    chinh_n = int(((reqs['dong_trong_24h'] == 1) & (reqs['mo_lai_trong_7_ngay'] == 0)).sum())
+    xem = reqs[reqs['duoc_xem_lai'] == 1]
+    bo_qua_n = int(xem['quyet_dinh_xem_lai'].isin(['sua', 'bo']).sum())
+    an_toan_n = int((reqs['mo_lai_trong_7_ngay'] == 1).sum())
+
+    chinh = chinh_n / len(reqs)
+    bo_qua = bo_qua_n / len(xem)
+    an_toan = an_toan_n / len(reqs)
+
+    print('\nE1 · tính thử 3 chỉ số trên 1.200 yêu cầu (chỉ số trong đợt chạy thử)')
+    print(f'Chính (% đóng <=24h & không mở lại 7 ngày): {chinh * 100:.2f}% ({chinh_n}/{len(reqs)})')
+    print(f'Dùng (tỉ lệ bỏ qua gợi ý sua/bo):           {bo_qua * 100:.2f}% ({bo_qua_n}/{len(xem)})')
+    print(f'An toàn (mở lại trong 7 ngày):              {an_toan * 100:.2f}% ({an_toan_n}/{len(reqs)})')
+    return dict(chinh=chinh, bo_qua=bo_qua, an_toan=an_toan)
+
+
 if __name__ == '__main__':
     runs = pd.read_csv('logix_runs.csv')
     reqs = pd.read_csv('logix_requests.csv', keep_default_na=False)
@@ -229,4 +247,5 @@ if __name__ == '__main__':
     # CP4 · Nhiệm vụ D: cỡ mẫu và tỉ lệ mở lại 7 ngày.
     tinh_d1(reqs)
 
-    # TODO CP5 · Nhiệm vụ E1: tính thử 3 chỉ số.
+    # CP5 · Nhiệm vụ E1: tính thử 3 chỉ số.
+    tinh_e1(reqs)
