@@ -4,7 +4,10 @@ Không cần khoá API. Điền các chỗ ghi VIẾT Ở ĐÂY (đánh dấu TO
 Bản gốc chưa sửa nằm ở lab13_starter.py.
 """
 import math
+from statistics import NormalDist
 import pandas as pd
+from statsmodels.stats.proportion import proportion_effectsize
+from statsmodels.stats.power import NormalIndPower
 
 # Bảng giá GIẢ ĐỊNH của lab (không phải giá thật của nhà cung cấp nào)
 GIA_VAO = 26        # đồng cho 1.000 token đầu vào
@@ -155,6 +158,47 @@ def xem_lai_tat_ca(runs, reqs):
     return kq['cps'], kq['cps'] / BASELINE
 
 
+def co_mau(p1, p2, alpha=0.05, power=0.80):
+    """D1: cỡ mẫu mỗi nhóm khi so hai tỉ lệ (z-test hai phía)."""
+    za = NormalDist().inv_cdf(1 - alpha / 2)
+    zb = NormalDist().inv_cdf(power)
+    pb = (p1 + p2) / 2
+    return math.ceil((za * math.sqrt(2 * pb * (1 - pb))
+                      + zb * math.sqrt(p1 * (1 - p1) + p2 * (1 - p2))) ** 2 / (p2 - p1) ** 2)
+
+
+def tinh_d1(reqs, baseline=0.70, alpha=0.05, power=0.80, icc=0.02):
+    """CP4 · Nhiệm vụ D1: tính năm câu cỡ mẫu và tỉ lệ mở lại 7 ngày hiện tại."""
+    n5 = co_mau(baseline, baseline + 0.05, alpha, power)
+    de_75 = 1 + (75 - 1) * icc
+    n_b = math.ceil(n5 * de_75)
+    so_nv_b = math.ceil(n_b / 75)
+    eff_20 = 20 / icc
+    eff_6 = 6 / icc
+
+    n6 = co_mau(baseline, baseline + 0.06, alpha, power)
+    m_e = math.ceil((1 - icc) * n6 / (20 - icc * n6))
+    de_e = 1 + (m_e - 1) * icc
+    es5 = proportion_effectsize(baseline + 0.05, baseline)
+    power_5pt = NormalIndPower().power(effect_size=es5, nobs1=n6, alpha=alpha, ratio=1.0)
+
+    sub = reqs[reqs['loai'].isin(PHAM_VI)]
+    reopen_all = (reqs['mo_lai_trong_7_ngay'] == 1).mean()
+    reopen_sub = (sub['mo_lai_trong_7_ngay'] == 1).mean()
+
+    print('\nD1 · cỡ mẫu pilot (baseline 0,70; alpha 0,05; power 0,80; ICC 0,02)')
+    print(f'a) Theo yêu cầu (+5 điểm): {n5:,} yêu cầu mỗi nhóm')
+    print(f'b) Theo nhân viên (m=75): DE={de_75:.2f}, {n_b:,} mỗi nhóm -> {so_nv_b} người/nhóm (tổng {2 * so_nv_b} > 40: không đủ người)')
+    print(f'c) 20 nhân viên mỗi nhóm: tối đa c/ICC = {eff_20:,.0f} < {n5:,} (không đạt)')
+    print(f'd) 6 depot mỗi nhóm: tối đa c/ICC = {eff_6:,.0f}')
+    print(f'e) Mức chênh 6 điểm ({n6:,}/nhóm), 20 nhân viên/nhóm: m >= {m_e} (DE={de_e:.2f}); power nếu chênh thật 5 điểm = {power_5pt:.2f}')
+    print(f'Tỉ lệ mở lại 7 ngày hiện tại: {reopen_all * 100:.2f}% ({int((reqs["mo_lai_trong_7_ngay"] == 1).sum())}/{len(reqs)}) toàn mẫu; '
+          f'{reopen_sub * 100:.2f}% ({int((sub["mo_lai_trong_7_ngay"] == 1).sum())}/{len(sub)}) trong phạm vi noi_dia + hang_nang')
+    return dict(n5=n5, de_75=de_75, n_b=n_b, eff_20=eff_20, eff_6=eff_6,
+                n6=n6, m_e=m_e, de_e=de_e, power_5pt=power_5pt,
+                reopen_all=reopen_all, reopen_sub=reopen_sub)
+
+
 if __name__ == '__main__':
     runs = pd.read_csv('logix_runs.csv')
     reqs = pd.read_csv('logix_requests.csv', keep_default_na=False)
@@ -182,6 +226,7 @@ if __name__ == '__main__':
     cps_b4, ti_so_b4 = xem_lai_tat_ca(runs, reqs)
     print(f'\nB4 · xem lại 100% (noi_dia + hang_nang): {cps_b4:,.0f} đ = {ti_so_b4:.2f}× [simulated]')
 
-    # TODO CP4 · Nhiệm vụ D: cỡ mẫu.
-    #   from statsmodels.stats.proportion import proportion_effectsize
-    #   from statsmodels.stats.power import NormalIndPower
+    # CP4 · Nhiệm vụ D: cỡ mẫu và tỉ lệ mở lại 7 ngày.
+    tinh_d1(reqs)
+
+    # TODO CP5 · Nhiệm vụ E1: tính thử 3 chỉ số.
