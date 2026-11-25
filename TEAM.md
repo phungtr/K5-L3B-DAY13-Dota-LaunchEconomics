@@ -83,11 +83,16 @@ Tên file của nhóm:
 
 ### Đóng góp cụ thể
 
-- (điền sau buổi lab)
+- Viết `src/lab13.py` cho CP1–CP2: ba hàm A1 (ba phép thử ĐẠT: 1,20 · 1,25 · 1,25), `mo_hinh`, bảng A3 theo loại, bảng A4 chi phí cố định, và B1–B4 (bảng độ nhạy, cặp yếu tố, giới hạn chạy, xem lại 100%).
+- Kiểm số D1 câu b (3.103 mỗi nhóm, cần 84 người > 40) và câu e (m ≥ 299, 859 mỗi nhóm); viết D2 năm câu và ba luật dừng trong `report/team/pilot_plan.yaml`.
+- Viết ba dòng rủi ro kinh tế E2 trong `report/team/chi_so.md`, số lấy từ B1 và B4.
 
 ### Bằng chứng
 
-- (commit, file, con số)
+- Commit `20705cb`: `src/lab13.py` (CP1–CP2). Chạy `PYTHONUTF8=1 python lab13.py` in ĐẠT và A2: chi phí mỗi việc thành công 4.472 đ (simulated), 978 việc thành công.
+- Commit `dcdc852`: `report/team/pilot_plan.yaml` (D2, ba luật dừng, cỡ mẫu 859, design effect 6,96).
+- Commit `1110294`: `report/team/chi_so.md` (E2, ba dòng rủi ro).
+- Báo cáo cá nhân: `report/team/2A202604092_TranVanTuan.md`.
 
 ## LaiTrongDuc-2A202604019
 
