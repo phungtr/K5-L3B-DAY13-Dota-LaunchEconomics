@@ -5,7 +5,7 @@
 - Tên nhóm: Dota
 - Lớp: L3B
 - Repo nhóm: `K5-L3B-DAY13-Dota-LaunchEconomics` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: https://github.com/phungtr/K5-L3B-DAY13-Dota-LaunchEconomics · `main` · (điền hash commit chốt khi nộp)
+- URL repo, nhánh nộp, commit chốt: https://github.com/phungtr/K5-L3B-DAY13-Dota-LaunchEconomics · `main` · commit chốt nội dung `c0c568b` (commit sau đó chỉ cập nhật `TEAM.md`)
 
 ## Thành viên
 
@@ -72,10 +72,12 @@ Tên file của nhóm:
 - Giữ hồ sơ `ho_so_launch_v0.md`: điền dần mục 1–7 theo từng CP, chốt đề xuất Go có điều kiện với 5 điều kiện có người phụ trách và ngày kiểm tra.
 - CP4: sửa phạm vi pilot từ 6 depot thành cả 12 depot (chia 20 + 20 cần 40 nhân viên), tính lại ngày quyết định 2027-01-08.
 - Viết `group_report.md`; review và merge PR #3, #4, #7, #10.
+- Duyệt chéo: chuẩn bị bài trình và câu trả lời cho 5 câu hỏi của hội đồng Bá Khí; chấm nhóm Bá Khí trong `phieu_cham.md` (30/30, Go có điều kiện).
+- Sau duyệt chéo: sửa luật dừng trong `pilot_plan.yaml` theo slide chữa D3/A4, thêm event sổ cái và dòng rủi ro tiền thuê, cập nhật hồ sơ.
 
 ### Bằng chứng
 
-- Commit `8f84bd5` (`TEAM.md`), `edd41d4` (hồ sơ mục 1–3, `group_report.md`), `f1dea60` (`report/team/cp3_nhan_doc_lap_nguoi_2.md`), `06ba839` (`pilot_plan.yaml`, hồ sơ mục 5–6), `83d9b8e` (báo cáo cá nhân), `969b39a` (hồ sơ mục 4, 7 và đề xuất).
+- Commit `8f84bd5` (`TEAM.md`), `edd41d4` (hồ sơ mục 1–3, `group_report.md`), `f1dea60` (`report/team/cp3_nhan_doc_lap_nguoi_2.md`), `06ba839` (`pilot_plan.yaml`, hồ sơ mục 5–6), `83d9b8e` (báo cáo cá nhân), `969b39a` (hồ sơ mục 4, 7 và đề xuất), `14766c4` (`phieu_cham.md`), `c0c568b` (sửa sau duyệt chéo).
 - Báo cáo cá nhân: `report/team/2A202604094_PhungQuangTra.md`.
 
 ## TranVanTuan-2A202604092
