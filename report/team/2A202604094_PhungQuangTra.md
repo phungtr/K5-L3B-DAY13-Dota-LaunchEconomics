@@ -5,7 +5,7 @@
 - Họ tên: Phùng Quang Trà
 - MSSV: 2A202604094
 - Email: traquangphung@gmail.com
-- Vai trong nhóm (người viết code, người kiểm số, người gắn nhãn 1, người gắn nhãn 2 kiêm giữ hồ sơ): Nhóm trưởng · Người gắn nhãn 2, kiêm giữ hồ sơ
+- Vai trong nhóm: Nhóm trưởng · Người gắn nhãn 2, kiêm giữ hồ sơ
 
 ## 2. Phần việc phụ trách
 
