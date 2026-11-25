@@ -5,7 +5,7 @@
 - Tên nhóm: Dota
 - Lớp: L3B
 - Repo nhóm: `K5-L3B-DAY13-Dota-LaunchEconomics` (xem [SUBMISSION.md](SUBMISSION.md))
-- URL repo, nhánh nộp, commit chốt: https://github.com/phungtr/K5-L3B-DAY13-Dota-LaunchEconomics · `main` · commit chốt nội dung `c0c568b` (commit sau đó chỉ cập nhật `TEAM.md`)
+- URL repo, nhánh nộp, commit chốt: https://github.com/phungtr/K5-L3B-DAY13-Dota-LaunchEconomics · `main` · commit chốt nội dung `e789167` (commit sau đó chỉ cập nhật `TEAM.md`)
 
 ## Thành viên
 
