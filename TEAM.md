@@ -109,11 +109,18 @@ Tên file của nhóm:
 
 ### Đóng góp cụ thể
 
-- (điền sau buổi lab)
+- Cài môi trường `src/.venv` (Python 3.12.16) trên Linux; đối chiếu độc lập dữ liệu CSV với output của Tuấn và hoàn thiện bảng A1–A4, B1–B4 trong `report/team/bang_chi_phi.md` (gắn nhãn `simulated`, kiểm quy luật đối xứng B1 và độ nhạy B4 ở mức 9 phút `11.743 đ = 0,98×` vs TB dữ liệu `15,3`–`16,25` phút).
+- Viết code CP4 (`co_mau()`, `tinh_d1()` tính 5 câu D1, `DE = 6,96`, `m ≥ 299`, power 5 điểm `0,64`, tỉ lệ `mo_lai_trong_7_ngay` `4,25%`/`3,97%`) và CP5 (`tinh_e1()` tính 3 chỉ số E1) trong `src/lab13.py`; điền 3 kết quả tính thử E1 (`82,83%`, `27,12%`, `4,25%`) vào `report/team/chi_so.md`.
+- Bổ sung `ti_le_ok_theo_lan_chay()` (`quoc_te`: `30,0% → 11,4% → 2,2%`) và tham số `phut_lam_lai=9` cho `xem_lai_tat_ca()` trong `src/lab13.py` để khớp toàn bộ số trích dẫn trong hồ sơ.
+- *(Chờ bổ sung sau 17:00: đối chiếu `pilot_plan.yaml` nhóm được chấm khi duyệt chéo Gate 2a.)*
 
 ### Bằng chứng
 
-- (commit, file, con số)
+- Commit `df1ca8b` (PR #2, merge `90aa388`): `report/team/bang_chi_phi.md` (A1–A4, B1–B4).
+- Commit `3c81b92` (PR #5, merge `5fa74d0`): `src/lab13.py` (D1 cỡ mẫu và tỉ lệ mở lại 7 ngày).
+- Commit `c992b8e` (PR #8, merge `5ea4d1b`): `src/lab13.py` (`tinh_e1()`) và `report/team/chi_so.md` (3 chỉ số tính thử E1).
+- Commit `b6cd818` (PR #11, merge `f14fd93`): `src/lab13.py` (A3 tỉ lệ `ok` theo lần chạy và B4 giả định 9 phút làm lại).
+- Báo cáo cá nhân: `report/team/2A202604019_LaiTrongDuc.md`.
 
 ## NguyenBaoTrung-2A202604013
 
