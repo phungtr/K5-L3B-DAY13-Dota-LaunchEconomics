@@ -67,11 +67,16 @@ Tên file của nhóm:
 
 ### Đóng góp cụ thể
 
-- (điền sau buổi lab)
+- Chốt phân vai và lịch theo checkpoint; nhóm làm theo nhánh riêng và pull request.
+- CP3: gắn nhãn độc lập 20 ca, đồng thuận với người gắn nhãn 1 là 16/20 = 80%.
+- Giữ hồ sơ `ho_so_launch_v0.md`: điền dần mục 1–7 theo từng CP, chốt đề xuất Go có điều kiện với 5 điều kiện có người phụ trách và ngày kiểm tra.
+- CP4: sửa phạm vi pilot từ 6 depot thành cả 12 depot (chia 20 + 20 cần 40 nhân viên), tính lại ngày quyết định 2027-01-08.
+- Viết `group_report.md`; review và merge PR #3, #4, #7, #10.
 
 ### Bằng chứng
 
-- (commit, file, con số)
+- Commit `8f84bd5` (`TEAM.md`), `edd41d4` (hồ sơ mục 1–3, `group_report.md`), `f1dea60` (`report/team/cp3_nhan_doc_lap_nguoi_2.md`), `06ba839` (`pilot_plan.yaml`, hồ sơ mục 5–6), `83d9b8e` (báo cáo cá nhân), `969b39a` (hồ sơ mục 4, 7 và đề xuất).
+- Báo cáo cá nhân: `report/team/2A202604094_PhungQuangTra.md`.
 
 ## TranVanTuan-2A202604092
 

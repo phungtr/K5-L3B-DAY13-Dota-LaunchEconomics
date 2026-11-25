@@ -18,9 +18,9 @@ Cách làm: mọi con số do `src/lab13.py` tính từ hai file trace (1.200 y�
 
 - **A · Chi phí** ([bang_chi_phi.md](bang_chi_phi.md)): `mo_hinh` cộng token, tool của mọi lần chạy (kể cả lần lỗi) và phút xem lại, làm lại (`simulated`), chia cho số việc thành công; chạy lại cho từng loại yêu cầu (A3) và cộng chi phí cố định (A4).
 - **B · Độ nhạy** ([bang_chi_phi.md](bang_chi_phi.md)): mỗi kịch bản là một lần gọi `mo_hinh` với một tham số đã đổi; B3 tính thêm chi phí cả hệ thống cho phần nhân viên làm thay.
-- **C · Bảng lỗi** ([bang_loi.md](bang_loi.md)): ...
-- **D · Pilot** ([pilot_plan.yaml](pilot_plan.yaml)): ...
-- **E · Chỉ số, event, rủi ro** ([chi_so.md](chi_so.md), [ho_so_launch_v0.md](ho_so_launch_v0.md)): ...
+- **C · Bảng lỗi** ([bang_loi.md](bang_loi.md)): hai người gắn nhãn độc lập 20 ca trong 8 phút, đồng thuận 16/20 = 80%; 4 ca lệch (1, 3, 8, 13) có quy tắc phân biệt; bảng khắc phục 5 ca (14, 7, 16, 4, 5), mỗi dòng có ngưỡng đo được và một vai trò phụ trách.
+- **D · Pilot** ([pilot_plan.yaml](pilot_plan.yaml)): tính đủ 5 câu D1 bằng `lab13.py` trước khi chọn cách chia (1.251; DE 2,48 → 42 người mỗi nhóm; tối đa 1.000; tối đa 300; m ≥ 299). Chọn chia theo nhân viên 20 + 20 trên cả 12 depot, chấp nhận mức chênh 6 điểm; ba luật dừng (an toàn, chi phí, mức dùng), luật an toàn so với đối chứng vì tỉ lệ mở lại hiện tại đã 4,25%.
+- **E · Chỉ số, event, rủi ro** ([chi_so.md](chi_so.md), [ho_so_launch_v0.md](ho_so_launch_v0.md)): tính thử 3 chỉ số bằng `lab13.py`, thêm 2 chỉ số tự đề xuất và 9 event có `trace_id`; 3 dòng rủi ro kinh tế lấy số từ bảng độ nhạy; ghép thành hồ sơ một trang 7 mục.
 
 ## 4. Kết quả
 
@@ -28,13 +28,16 @@ Cách làm: mọi con số do `src/lab13.py` tính từ hai file trace (1.200 y�
 - So với nhân viên tự làm (12.000 đ): cả hệ thống **5.865 đ/yêu cầu = 0,49×** (`simulated`); `quoc_te` 1,88× nên loại khỏi phạm vi.
 - Yếu tố nhạy nhất: số ca làm lại (+51,8% khi gấp đôi), tỉ lệ xem lại (+40,7%), lương (+23,1%) (`simulated`).
 - Con số bất lợi: xem lại 100% làm chi phí lên 0,98–1,04× (`simulated`).
-- Đề xuất cuối của `ho_so_launch_v0.md`: ...
+- Chỉ số trong đợt chạy thử: chính 82,83%, bỏ qua gợi ý 27,12%, mở lại 7 ngày 4,25% (chưa có đối chứng nên chưa kết luận về tác động).
+- Pilot: chia theo nhân viên 20 + 20, mức chênh 6 điểm, n hiệu dụng 859 mỗi nhóm; con số bất lợi: power 0,64 nếu chênh thật chỉ 5 điểm.
+- Đề xuất cuối của `ho_so_launch_v0.md`: **Go có điều kiện** cho pilot `noi_dia` + `hang_nang`, cả 12 depot, bắt đầu 2026-12-07, quyết định 2027-01-08; 5 điều kiện có người phụ trách và ngày kiểm tra (sửa ca 7 và 20; loại `quoc_te`, `doi_tac`; ký chấp nhận mức chênh 6 điểm; đo phút thật; giảm xem lại theo bậc).
 - Kết quả duyệt chéo nhóm nhận được từ hội đồng: ...
 
 ## 5. Khó khăn và cách xử lý
 
 - **Cài môi trường trên Windows.** Chạy nguyên khối lệnh macOS/Linux trong `src/README.md` bằng Windows PowerShell báo lỗi `python3 : The term 'python3' is not recognized...` và `source : The term 'source' is not recognized...`. Xử lý: dùng lệnh Windows `python -m venv .venv` rồi `.\.venv\Scripts\Activate.ps1`; sau đó `python -m pip install -r requirements.txt` cài xong (pandas 3.1.1, statsmodels 0.15.0, Python 3.12.10) và `python -c "import pandas, numpy, scipy, statsmodels; print('san sang')"` in `san sang`.
 - **B4 lệch giữa giả định đề và dữ liệu.** Đề cho 9 phút mỗi ca làm lại, nhưng cột `phut_lam_lai_simulated` trung bình 15,3 phút/ca trên toàn mẫu và 16,25 phút/ca trong phạm vi. Nhóm báo cáo cả ba con số (11.743 đ, 12.414 đ, 12.516 đ, đều `simulated`) thay vì chọn một.
+- **Phạm vi pilot mâu thuẫn với cách chia.** Bản đầu của `pilot_plan.yaml` ghi phạm vi "6 depot chạy thử", nhưng đợt chạy thử chỉ có 6 depot và 20 nhân viên, nên chia 20 + 20 là không thể (chỉ được 10 + 10, dưới 20 cụm). Sửa phạm vi thành cả 12 depot và tính lại ngày quyết định từ 30,7 yêu cầu/người/ngày cộng 7 ngày theo dõi mở lại.
 
 ## 6. Tổng hợp đóng góp
 
@@ -51,7 +54,8 @@ Chi tiết đóng góp của từng thành viên nằm trong `TEAM.md`.
 
 - Phút xem lại và làm lại là số giả lập; pilot phải thay bằng phút đo thật từ event.
 - Dữ liệu chỉ là mẫu 1.200 yêu cầu từ 6 depot trong 2 tuần chạy thử, không có nhóm đối chứng, nên chỉ nói "chỉ số trong đợt chạy thử là …".
-- ...
+- Baseline 0,70 là số cho sẵn để tính cỡ mẫu, trong khi chỉ số chính đo được trong đợt chạy thử là 82,83%; cỡ mẫu chưa tính lại với mức 0,83.
+- ICC 0,02 là giả định của đề; chưa kiểm bằng độ chênh tỉ lệ thành công giữa 20 nhân viên trong mẫu.
 
 ## 8. Tài liệu tham khảo
 
