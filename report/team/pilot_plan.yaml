@@ -24,15 +24,21 @@
 #   Toàn bộ 4,25% (51/1.200); phạm vi noi_dia + hang_nang 3,97% (39/982). Ngưỡng: vượt đối chứng ≥ 2 điểm hoặc vượt 6% tuyệt đối.
 #
 # Lưu ý dữ liệu: chỉ số chính đo được trên 1.200 yêu cầu là 82,83% (994/1.200), không phải 0,70. Baseline 0,70 là số cho sẵn của lab để tính cỡ mẫu; xem simulated_inputs.
+#
+# Lịch đo và ngày quyết định:
+#   Mỗi nhân viên nhận khoảng 1.500 × 81,8% ÷ 40 = 30,7 yêu cầu trong phạm vi mỗi ngày (81,8% = 982/1.200 là tỉ lệ noi_dia + hang_nang trong mẫu).
+#   Đủ 299 yêu cầu mỗi nhân viên cần 299 ÷ 30,7 ≈ 10 ngày ở bước 0.50.
+#   2026-12-07 bước 0.10 · 2026-12-14 bước 0.25 · 2026-12-21 bước 0.50, bắt đầu đo · 2026-12-30 đủ 299 yêu cầu mỗi người
+#   · 2027-01-06 hết 7 ngày theo dõi mở lại · 2027-01-08 ngày quyết định.
 
 pilot:
   owner: "Giám đốc vận hành LogiX-VN"
-  scope: "Loại noi_dia và hang_nang, 6 depot chạy thử. Không đưa quoc_te (1,88×) và doi_tac (0,85×) vào pilot; số đo A3, simulated"
+  scope: "Loại noi_dia và hang_nang, cả 12 depot (khoảng 40 nhân viên, chia 20 + 20 phân tầng theo depot; đợt chạy thử chỉ có 6 depot, 20 nhân viên nên không đủ 20 cụm mỗi nhóm). Không đưa quoc_te (1,88×) và doi_tac (0,85×) vào pilot; số đo A3, simulated"
   assignment:
     unit: "staff"
     control_share: 0.5
     randomized: true
-  rollout: [0.10, 0.25, 0.50]     # mỗi bước một tuần; 4 → 10 → 20 nhân viên
+  rollout: [0.10, 0.25, 0.50]     # mỗi bước một tuần; 4 → 10 → 20 nhân viên; chỉ đo chỉ số chính từ bước 0.50
   primary_metric:
     name: dong_trong_24h_khong_mo_lai_7_ngay
     baseline: 0.70                # số cho sẵn để tính cỡ mẫu; đo được 0,8283
@@ -52,11 +58,11 @@ pilot:
     - "NẾU tỉ lệ bỏ qua gợi ý vượt 40% (đo được 27,12% trong thử nghiệm) TRONG 1 tuần THÌ Trưởng nhóm CSKH phỏng vấn 5 nhân viên trong 3 ngày KHÔNG THÌ không được chuyển bước rollout"
   interim_looks: "chỉ kiểm tra chỉ số an toàn"
   rollback: "Giám đốc vận hành bấm cờ tắt trợ lý, hiệu lực trong 30 phút; khách được phục vụ bằng luồng nhân viên tự làm như trước pilot"
-  decision_date: "2027-01-05"     # ngày do nhóm chọn, cần kiểm lại với lịch rollout; xem ghi chú
+  decision_date: "2027-01-08"     # đủ 299 yêu cầu mỗi người ngày 2026-12-30, cộng 7 ngày theo dõi mở lại; xem lịch ở chú thích đầu file
   simulated_inputs:
     - "Giá token 26 và 130 đ mỗi 1.000 token, giá tool 15 đ, lương 2.000 đ mỗi phút (đề bài, giả định)"
     - "Phút xem lại và làm lại (phut_xem_lai_simulated, phut_lam_lai_simulated), simulated"
     - "Chi phí mỗi việc thành công 4.472 đ và 4.599 đ với chi phí cố định; simulated"
     - "Chi phí cố định 40 triệu đ mỗi tháng và 45.000 yêu cầu mỗi tháng (đề bài, giả định)"
     - "Baseline 0,70, ICC 0,02, mục tiêu +5 điểm (đề bài). Chỉ số chính đo được 0,8283; cỡ mẫu chưa tính lại với 0,83"
-    - "Ngày quyết định 2027-01-05 do nhóm chọn, chưa kiểm với lịch chạy"
+    - "Khối lượng 1.500 yêu cầu mỗi ngày, 40 nhân viên (đề bài, giả định) dùng để ước lịch đo và ngày quyết định 2027-01-08"
